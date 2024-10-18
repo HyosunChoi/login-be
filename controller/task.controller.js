@@ -34,6 +34,9 @@ taskController.getTasks = async(req, res) => {
 
 taskController.putTask = async(req, res) => {
     try {
+        console.log('Request Body:', req.body);  // req.body의 값을 확인
+        console.log('Request Params ID:', req.params.id);  // req.params에서 id 확인
+
         const {id} = req.params;
         const {task, isCompleted} = req.body;
         const updateTask = await Task.findByIdAndUpdate(id, {task, isCompleted}, {new:true});
