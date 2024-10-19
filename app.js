@@ -19,6 +19,7 @@ mongoose.connect(mongoURI, { useNewUrlParser: true }).then(() => {
     console.log("DB connection fail", err);
 });
 
+//development mode
 
 const PORT = process.env.PORT || 5000; // Heroku에서 제공하는 PORT를 사용하거나, 로컬에서 실행 시 5000번 포트 사용
 app.listen(PORT, () => {
