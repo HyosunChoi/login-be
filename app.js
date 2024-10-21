@@ -6,12 +6,16 @@ const indexRouter = require('./routes/index');
 const userRouter = require('./routes/user.api');
 require('dotenv').config();
 
+
 const app = express();
 const MONGODB_URI_PROD = process.env.MONGODB_URI_PROD;
 app.use(cors()); // CORS 미들웨어를 라우터보다 위에 배치
+app.use(cors({
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // PUT을 명시적으로 허용
+}));
 app.use(bodyParser.json());
 app.use('/api',indexRouter);
-app.use('api/user', userRouter);
+app.use('/api/user', userRouter);  // user.api.js의 라우트 연결
 
 const mongoURI = MONGODB_URI_PROD;
 
