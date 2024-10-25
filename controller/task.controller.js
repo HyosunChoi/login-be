@@ -7,7 +7,8 @@ const taskController = {};
 taskController.createTask = async(req, res) => {
     try {
         const {task, isCompleted } = req.body;
-        const newTask = new Task({task, isCompleted}); //새로운 task를 생성해야 합니다.
+        const {userId} = req;
+        const newTask = new Task({task, isCompleted, author:userId}); //새로운 task를 생성해야 합니다.
         await newTask.save(); //새로운 task를 저장해야 합니다.
         res.status(200).json({status:'ok', data:newTask}); //새로운 task는 data안에 있다
     } catch (err) {        
@@ -17,18 +18,19 @@ taskController.createTask = async(req, res) => {
 
 taskController.getTasks = async(req, res) => {
     try {
-        const taskList = await Task.find({}).select('-__v'); //taskList는 task의 array로 저장해야 합니다.
+        const taskList = await Task.find({}).populate('author'); //taskList는 task의 array로 저장해야 합니다.
 
         //_id를 id로 변환
         const formattedTask = taskList.map(task => ({
             id : task._id,
             task : task.task,
-            isCompleted : task.isCompleted            
+            isCompleted : task.isCompleted,
+            author : task.author            
         }));
 
-        res.status(200).json({status:'ok', data:formattedTask});
-    } catch(err) {
-        res.status(400).json({status:'fail', data:err})
+        res.status(200).json({status:'ok', data:taskList});
+    } catch(error) {
+        res.status(400).json({status:'fail', data:error})
     }
 };
 
@@ -48,9 +50,9 @@ taskController.putTask = async(req, res) => {
             isCompleted : updateTask.isCompleted
         };
 
-        res.status(200).json({status:'ok', data:formattedTask});
+        res.status(200).json({status:'ok', data:updateTask});
     } catch(err) {
-        res.status(400).json({status:'fail', data:err});
+        res.status(400).json({status:'fail', message:err.message});
     }
 };
 
@@ -77,7 +79,7 @@ taskController.deleteTask = async (req, res) => {
         isCompleted: deleteTask.isCompleted
       };
   
-      res.status(200).json({ status: 'ok', data: formattedTask });
+      res.status(200).json({ status: 'ok', data: deleteTask });
     } catch (err) {
       res.status(400).json({ status: 'fail', data: err });
     }

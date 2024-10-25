@@ -19,11 +19,10 @@ app.use('/api/user', userRouter);  // user.api.js의 라우트 연결
 
 const mongoURI = MONGODB_URI_PROD;
 
-mongoose.connect(mongoURI, { useNewUrlParser: true }).then(() => {
-    console.log('MongoDB Connected');
-}).catch((err) => {
-    console.log("DB connection fail", err);
-});
+mongoose
+.connect(mongoURI, { useNewUrlParser: true })
+.then(() => { console.log('MongoDB Connected');})
+.catch((err) => { console.log("DB connection fail", err);});
 
 const PORT = process.env.PORT || 5000; // Heroku에서 제공하는 PORT를 사용하거나, 로컬에서 실행 시 5000번 포트 사용
 app.listen(PORT, () => {
