@@ -24,6 +24,8 @@ const userShema = Schema({
 userShema.methods.toJSON = function () {
     const obj = this._doc;
     delete obj.password;
+    delete obj.updateAt;
+
     return obj;
 };
 userShema.methods.generateToken = function () {

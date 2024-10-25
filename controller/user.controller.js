@@ -18,10 +18,24 @@ userController.createUser = async (req, res) => {
         await newUser.save();
         res.status(200).json({status:'success'});
 
-    } catch (err) {
-      res.status(400).json({status:'fail',err})
+    } catch (error) {
+      res.status(400).json({status:'fail',error})
     }
   };
+
+  userController.getUser = async(req,res)=> {
+    try {
+      const {userId} = req;
+      const user = User.findById(userId);
+      if(!user){
+        throw new Error("can not find user");
+      }
+      res.status(200).json({status:"success", user});
+    } catch (error) {
+      res.status(400).json({status:'fail',error})
+    }
+
+  }
 
   userController.loginWithEmail = async (req, res) => {
     try {
